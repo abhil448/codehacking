@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('includes.user_alert')
+
 <h1>Users</h1>
 <table class="table table-hover">
         <thead>

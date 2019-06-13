@@ -31,5 +31,12 @@ class User extends Authenticatable
 
         return $this->belongsTo('App\Photo');
     }
+
+    public function CheckRole(){
+
+       return $this->role->name;
+
+
+    }
      
 }
