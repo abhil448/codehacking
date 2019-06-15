@@ -57,7 +57,7 @@
                         <li><a href="{{ url('/login') }}">Login</a></li>
                         <li><a href="{{ url('/register') }}">Register</a></li>
                     @else
-                        <li><a href="{{ Auth::user()->role->name == 'admin' ? url('/admin') : url('/404') }}">Admin</a></li>
+                        <li><a href="{{ Auth::user()->CheckRole() == 'admin' ? url('/admin') : url('/404') }}">Admin</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 {{ Auth::user()->name }} <span class="caret"></span>
