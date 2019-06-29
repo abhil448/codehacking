@@ -41,5 +41,9 @@ class User extends Authenticatable
     public function post(){
         return $this->hasMany('App\Post');
     }
+    public function getGravatarAttribute(){
+        $hash = md5(strtolower(trim($this->attribute['email']))) . "?=mm";
+        return "http://www.gravatar.com/avatar/$hash";
+    }
      
 }

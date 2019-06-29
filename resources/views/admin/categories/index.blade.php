@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-
+@include('includes.category_alert')
 
 
 <h1>categories</h1>

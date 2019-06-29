@@ -10,6 +10,7 @@ use App\Post;
 use Illuminate\Support\Facades\Auth;
 use App\Photo;
 use App\Category;
+use Illuminate\Support\Facades\Session;
 
 class AdminPostsController extends Controller
 {
@@ -20,7 +21,7 @@ class AdminPostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::paginate(3);
         return view('admin.posts.index',compact('posts'));
     }
 
@@ -32,7 +33,7 @@ class AdminPostsController extends Controller
     public function create()
     {
         //
-        $categories = Category::lists('name','id')->all();
+        $categories = Category::pluck('name','id')->all();
         return view('admin.posts.create',compact('categories'));
     }
 
@@ -55,6 +56,7 @@ class AdminPostsController extends Controller
 
         }
         $user->post()->create($input);
+        Session::flash('post_alert','The post has created !!');
         return redirect('/admin/posts');
         
     }
@@ -80,7 +82,7 @@ class AdminPostsController extends Controller
     {
         //
         $post = Post::findOrFail($id);
-        $categories = Category::lists('name','id')->all();
+        $categories = Category::pluck('name','id')->all();
         return view('admin.posts.edit',compact('post','categories'));
     }
 
@@ -103,6 +105,7 @@ class AdminPostsController extends Controller
 
         }
         Auth::user()->post()->whereId($id)->first()->update($input);
+        Session::flash('post_alert','The post has deleted!!');
         return redirect('admin/posts');
     }
 
@@ -118,6 +121,17 @@ class AdminPostsController extends Controller
         
         unlink(public_path() . Auth::user()->post()->findOrFail($id)->photo->file);
         Auth::user()->post()->findOrFail($id)->delete();
+        Session::flash('post_alert','The Post was deleted!!');
         return redirect('admin/posts');
+    }
+
+    public function post($slug){
+
+        $post = Post::findBySlugOrFail($slug);
+        $categories = Category::all();
+        $comments = $post->comments()->whereIsActive(1)->get();
+        
+        return view('post',compact('post','categories','comments'));
+
     }
 }

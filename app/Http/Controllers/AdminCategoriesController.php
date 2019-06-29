@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Category;
+use Illuminate\Support\Facades\Session;
 
 class AdminCategoriesController extends Controller
 {
@@ -40,8 +41,12 @@ class AdminCategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if($request->name == ''){
+            Session::flash('category_alert','Name field should not be empty!!');
+            return redirect()->back();
+        }
         Category::create($request->all());
+        Session::flash('category_alert','The category has craeted!!');
         return redirect('admin/categories');
     }
 
@@ -79,6 +84,7 @@ class AdminCategoriesController extends Controller
     {
         //
         Category::findOrFail($id)->update($request->all());
+        Session::flash('category_alert','The category has updated!!');
         return redirect('admin/categories');
     }
 
@@ -92,6 +98,7 @@ class AdminCategoriesController extends Controller
     {
         //
         Category::findOrFail($id)->delete();
+        Session::flash('category_alert','The category was deleted!!');
         return redirect('admin/categories');
     }
 }
